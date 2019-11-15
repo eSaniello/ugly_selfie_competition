@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "137960375016",
+    "firebase_url": "https://ugly-selfie-competition-715f1.firebaseio.com",
+    "project_id": "ugly-selfie-competition-715f1",
+    "storage_bucket": "ugly-selfie-competition-715f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137960375016:android:3edf70a000067040cbbf5d",
+        "android_client_info": {
+          "package_name": "com.ugly_selfie_competition.ugly_selfie_competition"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137960375016-s204mdoljo0prhfg6k6mjmlnpgj9cd72.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ugly_selfie_competition.ugly_selfie_competition",
+            "certificate_hash": "4f051b92aa03c4a5df4b3413a3a7f92501d4ecb9"
+          }
+        },
+        {
+          "client_id": "137960375016-g2d35tfqq8r7476464pgrucih4ifh18u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRBVJrtdjFKgKJoHBXCJiWsHlqlpgWOS4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137960375016-g2d35tfqq8r7476464pgrucih4ifh18u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
