@@ -10,6 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // debugShowCheckedModeBanner: false,
       title: 'Ugly Selfie Competition',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -25,10 +26,15 @@ class MyApp extends StatelessWidget {
 
             return LoginScreen();
           }),
-      routes: {
-        '/login': (context) => LoginScreen(),
-        '/home': (context) => HomeScreen(),
-        '/upload_selfie': (context) => UploadSelfieScreen(),
+      onGenerateRoute: (RouteSettings settings) {
+        print('build route for ${settings.name}');
+        var routes = <String, WidgetBuilder>{
+          "/login": (ctx) => LoginScreen(),
+          "/home": (ctx) => HomeScreen(user: settings.arguments),
+          '/upload_selfie': (context) => UploadSelfieScreen(),
+        };
+        WidgetBuilder builder = routes[settings.name];
+        return MaterialPageRoute(builder: (ctx) => builder(ctx));
       },
     );
   }

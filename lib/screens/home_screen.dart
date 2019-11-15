@@ -18,17 +18,28 @@ class _HomeScreenState extends State<HomeScreen> {
   // Properties & Variables needed
 
   int currentTab = 0; // to keep track of active tab index
-  final List<Widget> screens = [
-    TimelineScreen(),
-    ProfileScreen(),
-    LikesScreen(),
-    SettingsScreen(),
-  ]; // to store nested tabs
+  List<Widget> screens = [];
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = TimelineScreen(); // Our first view in viewport
+  Widget currentScreen;
+
+  @override
+  void initState() {
+    super.initState();
+
+    screens = [
+      TimelineScreen(widget.user),
+      ProfileScreen(),
+      LikesScreen(),
+      SettingsScreen(),
+    ]; // to store nested tabs
+
+    currentScreen = TimelineScreen(widget.user);
+  } // Our first view in viewport
 
   @override
   Widget build(BuildContext context) {
+    FirebaseUser userData = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Ugly Selfie Competition'),
@@ -51,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         notchMargin: 10,
+        elevation: 10,
         child: Container(
           height: 60,
           child: Row(
@@ -63,8 +75,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen =
-                            TimelineScreen(); // if user taps on this dashboard tab will be active
+                        currentScreen = TimelineScreen(
+                          widget.user == null ? userData : widget.user,
+                        ); // if user taps on this dashboard tab will be active
                         currentTab = 0;
                       });
                     },
@@ -97,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Icon(
-                          Icons.chat,
+                          Icons.person,
                           color: currentTab == 1 ? Colors.blue : Colors.grey,
                         ),
                         Text(
@@ -130,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Icon(
-                          Icons.dashboard,
+                          Icons.favorite,
                           color: currentTab == 2 ? Colors.blue : Colors.grey,
                         ),
                         Text(
@@ -155,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Icon(
-                          Icons.chat,
+                          Icons.settings,
                           color: currentTab == 3 ? Colors.blue : Colors.grey,
                         ),
                         Text(

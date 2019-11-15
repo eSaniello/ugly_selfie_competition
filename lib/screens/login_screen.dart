@@ -90,7 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   print(user);
 //            Navigator.of(context).pop();
                   storeUser(user);
-                  Navigator.of(context).pushReplacementNamed('/home');
+                  Navigator.of(context)
+                      .pushReplacementNamed('/home', arguments: user);
                 }).catchError((e) => print(e));
               },
             ),
