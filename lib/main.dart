@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ugly_selfie_competition/screens/home_screen.dart';
 import 'package:ugly_selfie_competition/screens/login_screen.dart';
+import 'package:ugly_selfie_competition/screens/upload_selfie_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,8 +19,8 @@ class MyApp extends StatelessWidget {
           builder:
               (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
             if (snapshot.hasData) {
-              // FirebaseUser user = snapshot.data; //this is user data
-              return HomeScreen();
+              FirebaseUser user = snapshot.data; //this is user data
+              return HomeScreen(user: user);
             }
 
             return LoginScreen();
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
+        '/upload_selfie': (context) => UploadSelfieScreen(),
       },
     );
   }

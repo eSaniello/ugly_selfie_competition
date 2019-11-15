@@ -1,105 +1,176 @@
-import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart'; // For File Upload To Firestore
-import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
-import 'package:image_picker/image_picker.dart'; // For Image Picker
-import 'package:path/path.dart' as Path;
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:ugly_selfie_competition/screens/likes_screen.dart';
+import 'package:ugly_selfie_competition/screens/profile_screen.dart';
+import 'package:ugly_selfie_competition/screens/settings_screen.dart';
+import 'package:ugly_selfie_competition/screens/timeline_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  final FirebaseUser user;
+
+  HomeScreen({this.user});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
+  // Properties & Variables needed
 
-  File _image;
-  String _uploadedFileURL;
-
-  Future chooseFile() async {
-    await ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
-      setState(() {
-        _image = image;
-      });
-    });
-  }
-
-  Future uploadFile() async {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('selfies/${Path.basename(_image.path)}}');
-    StorageUploadTask uploadTask = storageReference.putFile(_image);
-    await uploadTask.onComplete;
-    print('File Uploaded');
-    storageReference.getDownloadURL().then((fileURL) {
-      setState(() {
-        _uploadedFileURL = fileURL;
-      });
-    });
-  }
-
-  Future<String> signOut() async {
-    await googleSignIn.signOut();
-    await _auth.signOut();
-    print(' sign out');
-    return 'error';
-  }
+  int currentTab = 0; // to keep track of active tab index
+  final List<Widget> screens = [
+    TimelineScreen(),
+    ProfileScreen(),
+    LikesScreen(),
+    SettingsScreen(),
+  ]; // to store nested tabs
+  final PageStorageBucket bucket = PageStorageBucket();
+  Widget currentScreen = TimelineScreen(); // Our first view in viewport
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Firestore File Upload'),
+        title: Text('Ugly Selfie Competition'),
+        centerTitle: true,
       ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Text('Selected Image'),
-            _image != null
-                ? Image.asset(
-                    _image.path,
-                    height: 150,
+      body: PageStorage(
+        child: currentScreen,
+        bucket: bucket,
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).pushNamed(
+            '/upload_selfie',
+            arguments: widget.user,
+          );
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        notchMargin: 10,
+        child: Container(
+          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  MaterialButton(
+                    minWidth: 40,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen =
+                            TimelineScreen(); // if user taps on this dashboard tab will be active
+                        currentTab = 0;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.dashboard,
+                          color: currentTab == 0 ? Colors.blue : Colors.grey,
+                        ),
+                        Text(
+                          'Home',
+                          style: TextStyle(
+                            color: currentTab == 0 ? Colors.blue : Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  MaterialButton(
+                    minWidth: 40,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen =
+                            ProfileScreen(); // if user taps on this dashboard tab will be active
+                        currentTab = 1;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.chat,
+                          color: currentTab == 1 ? Colors.blue : Colors.grey,
+                        ),
+                        Text(
+                          'Profile',
+                          style: TextStyle(
+                            color: currentTab == 1 ? Colors.blue : Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
                   )
-                : Container(height: 150),
-            _image == null
-                ? RaisedButton(
-                    child: Text('Choose File'),
-                    onPressed: chooseFile,
-                    color: Colors.cyan,
+                ],
+              ),
+
+              // Right Tab bar icons
+
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  MaterialButton(
+                    minWidth: 40,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen =
+                            LikesScreen(); // if user taps on this dashboard tab will be active
+                        currentTab = 2;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.dashboard,
+                          color: currentTab == 2 ? Colors.blue : Colors.grey,
+                        ),
+                        Text(
+                          'Likes',
+                          style: TextStyle(
+                            color: currentTab == 2 ? Colors.blue : Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  MaterialButton(
+                    minWidth: 40,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen =
+                            SettingsScreen(); // if user taps on this dashboard tab will be active
+                        currentTab = 3;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.chat,
+                          color: currentTab == 3 ? Colors.blue : Colors.grey,
+                        ),
+                        Text(
+                          'Settings',
+                          style: TextStyle(
+                            color: currentTab == 3 ? Colors.blue : Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
                   )
-                : Container(),
-            _image != null
-                ? RaisedButton(
-                    child: Text('Upload File'),
-                    onPressed: uploadFile,
-                    color: Colors.cyan,
-                  )
-                : Container(),
-            _image != null
-                ? RaisedButton(
-                    child: Text('Clear Selection'),
-                    onPressed: () {},
-                  )
-                : Container(),
-            Text('Uploaded Image'),
-            _uploadedFileURL != null
-                ? Image.network(
-                    _uploadedFileURL,
-                    height: 150,
-                  )
-                : Container(),
-            RaisedButton(
-              child: prefix0.Text('logout'),
-              onPressed: () {
-                signOut().whenComplete(() {
-                  Navigator.pushReplacementNamed(context, '/login');
-                });
-              },
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

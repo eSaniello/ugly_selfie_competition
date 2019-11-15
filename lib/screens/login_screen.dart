@@ -44,43 +44,58 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('hi'),
+        title: Text('Ugly Selfie Competition'),
+        centerTitle: true,
       ),
-      body: Container(
-        color: Colors.blue,
-        width: size.width * .70,
-        margin: EdgeInsets.symmetric(horizontal: size.width * .10),
-        child: InkWell(
-          child: Row(
-            children: <Widget>[
-//            Container(
-//              width: size.width * .10,
-//              child: Image.asset(
-//                'assets/images/google.jpg',
-//                fit: BoxFit.contain,
-//              ),
-//            ),
-              Padding(
-                padding: EdgeInsets.only(left: size.width * .05),
-                child: Text(
-                  'google',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(height: size.height * .10),
+          Text(
+            'Please sign in 😁',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: size.width * .08),
           ),
-          onTap: () {
-            signInWithGoogle().then((FirebaseUser user) {
-              print(user);
+          SizedBox(
+            height: size.height * .10,
+          ),
+          Container(
+            color: Colors.blue,
+            width: size.width * .70,
+            margin: EdgeInsets.symmetric(horizontal: size.width * .10),
+            child: InkWell(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: size.width * .10,
+                    child: Image.asset(
+                      'assets/images/google.jpg',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: size.width * .05),
+                    child: Text(
+                      'Sign in',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              onTap: () {
+                signInWithGoogle().then((FirebaseUser user) {
+                  print(user);
 //            Navigator.of(context).pop();
-              storeUser(user);
-              Navigator.of(context).pushReplacementNamed('/home');
-            }).catchError((e) => print(e));
-          },
-        ),
+                  storeUser(user);
+                  Navigator.of(context).pushReplacementNamed('/home');
+                }).catchError((e) => print(e));
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
