@@ -21,10 +21,20 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> screens = [];
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen;
+  var user;
 
   @override
   void initState() {
     super.initState();
+
+    FirebaseAuth.instance.currentUser().then((userData) {
+      setState(() {
+        user = userData;
+        print(user);
+      });
+    }).catchError((onError) {
+      print(onError);
+    });
 
     screens = [
       TimelineScreen(widget.user),
