@@ -17,7 +17,10 @@ class _TimelineScreenState extends State<TimelineScreen> {
     var size = MediaQuery.of(context).size;
 
     return StreamBuilder(
-      stream: Firestore.instance.collection('posts').snapshots(),
+      stream: Firestore.instance
+          .collection('posts')
+          .orderBy('likes', descending: true)
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return Center(
@@ -28,52 +31,68 @@ class _TimelineScreenState extends State<TimelineScreen> {
           itemCount: snapshot.data.documents.length,
           itemBuilder: (context, index) {
             DocumentSnapshot ds = snapshot.data.documents[index];
-            return widget.user.uid == ds['uid']
-                ? Container()
-                : Container(
-                    // width: 100,
-                    // height: size.height * .50,
-                    padding: const EdgeInsets.all(10),
-                    child: Card(
-                      elevation: 5,
-                      child: Column(
-                        children: <Widget>[
-                          ListTile(
-                            title: Text(ds['username']),
-                          ),
-                          Container(
-                            width: size.width,
-                            height: size.height * .50,
-                            child: Image.network(
-                              ds['imageUrl'],
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
-                          ButtonBar(
-                            alignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              IconButton(
-                                icon: Icon(Icons.favorite_border),
-                                onPressed: () {
-                                  // likePost(widget.user);
-                                  var likes = [];
-                                  likes.add(widget.user.uid);
-                                  try {
-                                    Firestore.instance
-                                        .collection('posts')
-                                        .document(ds.documentID)
-                                        .updateData({'likes': likes});
-                                  } catch (e) {
-                                    print(e.toString());
-                                  }
-                                },
-                              )
-                            ],
-                          )
-                        ],
+            return Container(
+              padding: const EdgeInsets.all(10),
+              child: Card(
+                elevation: 5,
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      title: Text(ds['username']),
+                      trailing: index == 0 ? Icon(Icons.star) : Text(''),
+                    ),
+                    Container(
+                      width: size.width,
+                      height: size.height * .50,
+                      child: Image.network(
+                        ds['imageUrl'],
+                        fit: BoxFit.fitWidth,
                       ),
                     ),
-                  );
+                    ButtonBar(
+                      alignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            ds['likes'].contains(widget.user.uid)
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                          ),
+                          onPressed: () {
+                            if (ds['likes'].contains(widget.user.uid)) {
+                              try {
+                                Firestore.instance
+                                    .collection('posts')
+                                    .document(ds.documentID)
+                                    .updateData({
+                                  'likes':
+                                      FieldValue.arrayRemove([widget.user.uid])
+                                });
+                              } catch (e) {
+                                print(e.toString());
+                              }
+                            } else {
+                              try {
+                                Firestore.instance
+                                    .collection('posts')
+                                    .document(ds.documentID)
+                                    .updateData({
+                                  'likes':
+                                      FieldValue.arrayUnion([widget.user.uid])
+                                });
+                              } catch (e) {
+                                print(e.toString());
+                              }
+                            }
+                          },
+                        ),
+                        Text('${ds['likes'].length}'),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
           },
         );
       },
