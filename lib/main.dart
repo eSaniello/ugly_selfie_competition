@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:ugly_selfie_competition/screens/home_screen.dart';
 import 'package:ugly_selfie_competition/screens/login_screen.dart';
 import 'package:ugly_selfie_competition/screens/upload_selfie_screen.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(new MyApp());
+  });
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       title: 'Ugly Selfie Competition',
       theme: ThemeData(
         primarySwatch: Colors.blue,
