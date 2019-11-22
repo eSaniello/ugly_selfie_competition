@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ugly_selfie_competition/providers/user.dart';
 import 'package:ugly_selfie_competition/screens/likes_screen.dart';
 import 'package:ugly_selfie_competition/screens/profile_screen.dart';
 import 'package:ugly_selfie_competition/screens/settings_screen.dart';
@@ -48,7 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseUser userData = ModalRoute.of(context).settings.arguments;
+    // FirebaseUser userData = ModalRoute.of(context).settings.arguments;
+    final userData = Provider.of<User>(context).user;
 
     return Scaffold(
       appBar: AppBar(
