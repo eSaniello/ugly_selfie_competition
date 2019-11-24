@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ugly_selfie_competition/screens/likes_screen.dart';
+import 'package:ugly_selfie_competition/screens/prizes_screen.dart';
 import 'package:ugly_selfie_competition/screens/profile_screen.dart';
 import 'package:ugly_selfie_competition/screens/settings_screen.dart';
 import 'package:ugly_selfie_competition/screens/timeline_screen.dart';
@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     screens = [
       TimelineScreen(),
       ProfileScreen(),
-      LikesScreen(),
+      PrizeScreen(),
       SettingsScreen(),
     ];
 
@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen = LikesScreen();
+                        currentScreen = PrizeScreen();
                         currentTab = 2;
                       });
                     },
@@ -131,11 +131,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Icon(
-                          Icons.favorite,
+                          Icons.stars,
                           color: currentTab == 2 ? Colors.blue : Colors.grey,
                         ),
                         Text(
-                          'Likes',
+                          'Prizes',
                           style: TextStyle(
                             color: currentTab == 2 ? Colors.blue : Colors.grey,
                           ),
