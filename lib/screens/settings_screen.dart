@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:ugly_selfie_competition/providers/user.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -8,22 +8,12 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-
-  Future<String> signOut() async {
-    await googleSignIn.signOut();
-    await _auth.signOut();
-    print(' sign out');
-    return 'error';
-  }
-
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
       child: Text('logout'),
       onPressed: () {
-        signOut().whenComplete(() {
+        Provider.of<User>(context).signOut().whenComplete(() {
           Navigator.pushReplacementNamed(context, '/login');
         });
       },

@@ -1,57 +1,37 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:ugly_selfie_competition/providers/user.dart';
 import 'package:ugly_selfie_competition/screens/likes_screen.dart';
 import 'package:ugly_selfie_competition/screens/profile_screen.dart';
 import 'package:ugly_selfie_competition/screens/settings_screen.dart';
 import 'package:ugly_selfie_competition/screens/timeline_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  final FirebaseUser user;
-
-  HomeScreen({this.user});
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Properties & Variables needed
-
-  int currentTab = 0; // to keep track of active tab index
+  int currentTab = 0;
   List<Widget> screens = [];
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen;
-  // var user;
 
   @override
   void initState() {
     super.initState();
 
-    // FirebaseAuth.instance.currentUser().then((userData) {
-    //   setState(() {
-    //     user = userData;
-    //     print(user);
-    //   });
-    // }).catchError((onError) {
-    //   print(onError);
-    // });
-
     screens = [
-      TimelineScreen(widget.user),
+      TimelineScreen(),
       ProfileScreen(),
       LikesScreen(),
       SettingsScreen(),
-    ]; // to store nested tabs
+    ];
 
-    currentScreen = TimelineScreen(widget.user);
-  } // Our first view in viewport
+    currentScreen = TimelineScreen();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // FirebaseUser userData = ModalRoute.of(context).settings.arguments;
-    final userData = Provider.of<User>(context).user;
+    // final userData = Provider.of<User>(context).user;
 
     return Scaffold(
       appBar: AppBar(
@@ -67,7 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
           Navigator.of(context).pushNamed(
             '/upload_selfie',
-            arguments: widget.user,
           );
         },
       ),
@@ -88,9 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen = TimelineScreen(
-                          widget.user == null ? userData : widget.user,
-                        ); // if user taps on this dashboard tab will be active
+                        currentScreen = TimelineScreen();
                         currentTab = 0;
                       });
                     },
@@ -114,8 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen =
-                            ProfileScreen(); // if user taps on this dashboard tab will be active
+                        currentScreen = ProfileScreen();
                         currentTab = 1;
                       });
                     },
@@ -147,8 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen =
-                            LikesScreen(); // if user taps on this dashboard tab will be active
+                        currentScreen = LikesScreen();
                         currentTab = 2;
                       });
                     },
@@ -172,8 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen =
-                            SettingsScreen(); // if user taps on this dashboard tab will be active
+                        currentScreen = SettingsScreen();
                         currentTab = 3;
                       });
                     },

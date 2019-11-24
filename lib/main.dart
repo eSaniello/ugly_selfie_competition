@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
             builder:
                 (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
               if (snapshot.hasData) {
-                FirebaseUser user = snapshot.data; //this is user data
-                return HomeScreen(user: user);
+                // FirebaseUser user = snapshot.data; //this is user data
+                return HomeScreen();
               }
 
               return LoginScreen();
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           print('build route for ${settings.name}');
           var routes = <String, WidgetBuilder>{
             "/login": (ctx) => LoginScreen(),
-            "/home": (ctx) => HomeScreen(user: settings.arguments),
+            "/home": (ctx) => HomeScreen(),
             '/upload_selfie': (context) => UploadSelfieScreen(),
           };
           WidgetBuilder builder = routes[settings.name];

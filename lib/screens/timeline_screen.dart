@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:ugly_selfie_competition/providers/user.dart';
 
 class TimelineScreen extends StatefulWidget {
-  final FirebaseUser user;
-
-  TimelineScreen(this.user);
-
   @override
   _TimelineScreenState createState() => _TimelineScreenState();
 }
@@ -15,6 +12,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    final userData = Provider.of<User>(context).user;
 
     return StreamBuilder(
       stream: Firestore.instance
@@ -39,11 +37,11 @@ class _TimelineScreenState extends State<TimelineScreen> {
                   children: <Widget>[
                     ListTile(
                       title: Text(ds['username']),
+                      subtitle: Text(ds['caption']),
                       trailing: index == 0 ? Icon(Icons.star) : Text(''),
                     ),
                     Container(
                       width: size.width,
-                      height: size.height * .50,
                       child: Image.network(
                         ds['imageUrl'],
                         fit: BoxFit.fitWidth,
@@ -54,19 +52,19 @@ class _TimelineScreenState extends State<TimelineScreen> {
                       children: <Widget>[
                         IconButton(
                           icon: Icon(
-                            ds['likes'].contains(widget.user.uid)
+                            ds['likes'].contains(userData.uid)
                                 ? Icons.favorite
                                 : Icons.favorite_border,
                           ),
                           onPressed: () {
-                            if (ds['likes'].contains(widget.user.uid)) {
+                            if (ds['likes'].contains(userData.uid)) {
                               try {
                                 Firestore.instance
                                     .collection('posts')
                                     .document(ds.documentID)
                                     .updateData({
                                   'likes':
-                                      FieldValue.arrayRemove([widget.user.uid])
+                                      FieldValue.arrayRemove([userData.uid])
                                 });
                               } catch (e) {
                                 print(e.toString());
@@ -77,8 +75,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
                                     .collection('posts')
                                     .document(ds.documentID)
                                     .updateData({
-                                  'likes':
-                                      FieldValue.arrayUnion([widget.user.uid])
+                                  'likes': FieldValue.arrayUnion([userData.uid])
                                 });
                               } catch (e) {
                                 print(e.toString());

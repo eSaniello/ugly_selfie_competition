@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:ugly_selfie_competition/providers/user.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -9,24 +10,24 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final GoogleSignIn googleSignIn = GoogleSignIn();
 
-  Future<FirebaseUser> signInWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+  // Future<FirebaseUser> signInWithGoogle() async {
+  //   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+  //   final GoogleSignInAuthentication googleSignInAuthentication =
+  //       await googleSignInAccount.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleSignInAuthentication.accessToken,
-      idToken: googleSignInAuthentication.idToken,
-    );
+  //   final AuthCredential credential = GoogleAuthProvider.getCredential(
+  //     accessToken: googleSignInAuthentication.accessToken,
+  //     idToken: googleSignInAuthentication.idToken,
+  //   );
 
-    final FirebaseUser user =
-        (await _auth.signInWithCredential(credential)).user;
-    print("signed in " + user.displayName);
-    return user;
-  }
+  //   final FirebaseUser user =
+  //       (await _auth.signInWithCredential(credential)).user;
+  //   // print("signed in " + user.displayName);
+  //   return user;
+  // }
 
   void storeUser(FirebaseUser userData) async {
     await Firestore.instance
@@ -86,9 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               onTap: () {
-                signInWithGoogle().then((FirebaseUser user) {
-                  print(user);
-//            Navigator.of(context).pop();
+                Provider.of<User>(context)
+                    .signInWithGoogle()
+                    .then((FirebaseUser user) {
                   storeUser(user);
                   Navigator.of(context)
                       .pushReplacementNamed('/home', arguments: user);
