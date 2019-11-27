@@ -10,13 +10,23 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      child: Text('logout'),
-      onPressed: () {
-        Provider.of<User>(context).signOut().whenComplete(() {
-          Navigator.pushReplacementNamed(context, '/login');
-        });
-      },
+    var size = MediaQuery.of(context).size;
+
+    return Center(
+      heightFactor: size.height * .0020,
+      child: Container(
+        width: size.width * .90,
+        child: RaisedButton(
+          color: Colors.red,
+          textColor: Colors.white,
+          child: Text('logout'),
+          onPressed: () {
+            Provider.of<User>(context).signOut().whenComplete(() {
+              Navigator.pushReplacementNamed(context, '/login');
+            });
+          },
+        ),
+      ),
     );
   }
 }
