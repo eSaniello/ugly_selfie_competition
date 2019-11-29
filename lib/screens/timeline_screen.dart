@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return Center(
-            child: CircularProgressIndicator(),
+            child: LinearProgressIndicator(),
           );
 
         return ListView.builder(
@@ -38,13 +39,21 @@ class _TimelineScreenState extends State<TimelineScreen> {
                     ListTile(
                       title: Text(ds['username']),
                       subtitle: Text(ds['caption']),
-                      trailing: index == 0 ? Icon(Icons.star) : Text(''),
+                      trailing: index == 0
+                          ? Icon(
+                              Icons.star,
+                              color: Colors.orange,
+                            )
+                          : Text(''),
                     ),
                     Container(
                       width: size.width,
-                      child: Image.network(
-                        ds['imageUrl'],
+                      child: CachedNetworkImage(
                         fit: BoxFit.fitWidth,
+                        imageUrl: ds['imageUrl'],
+                        placeholder: (context, url) =>
+                            LinearProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
                     ),
                     ButtonBar(

@@ -10,25 +10,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
-  // final GoogleSignIn googleSignIn = GoogleSignIn();
-
-  // Future<FirebaseUser> signInWithGoogle() async {
-  //   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-  //   final GoogleSignInAuthentication googleSignInAuthentication =
-  //       await googleSignInAccount.authentication;
-
-  //   final AuthCredential credential = GoogleAuthProvider.getCredential(
-  //     accessToken: googleSignInAuthentication.accessToken,
-  //     idToken: googleSignInAuthentication.idToken,
-  //   );
-
-  //   final FirebaseUser user =
-  //       (await _auth.signInWithCredential(credential)).user;
-  //   // print("signed in " + user.displayName);
-  //   return user;
-  // }
-
   void storeUser(FirebaseUser userData) async {
     await Firestore.instance
         .collection("users")
@@ -39,11 +20,27 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  Future<void> loadingModal() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Please wait'),
+          content: Container(
+            child: LinearProgressIndicator(),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Color(0xfff6c4cd),
       appBar: AppBar(
         title: Text('Ugly Selfie Competition'),
         centerTitle: true,
@@ -51,9 +48,17 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          SizedBox(height: size.height * .10),
+          Center(
+            child: Container(
+              // width: size.width * .10,
+              child: Image.asset(
+                'assets/images/logo.png',
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
           Text(
-            'Please sign in 😁',
+            'Please sign in 🥴',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: size.width * .08),
           ),
@@ -87,10 +92,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               onTap: () {
+                loadingModal();
                 Provider.of<User>(context)
                     .signInWithGoogle()
                     .then((FirebaseUser user) {
                   storeUser(user);
+                  Navigator.of(context).pop();
                   Navigator.of(context)
                       .pushReplacementNamed('/home', arguments: user);
                 }).catchError((e) => print(e));

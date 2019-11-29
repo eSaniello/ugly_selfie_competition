@@ -23,7 +23,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Ugly Selfie Competition',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.pink,
+          accentColor: Colors.orange,
         ),
         home: FutureBuilder<FirebaseUser>(
             future: FirebaseAuth.instance.currentUser(),

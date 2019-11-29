@@ -76,13 +76,19 @@ class _UploadSelfieScreenState extends State<UploadSelfieScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   FlatButton(
-                    color: Colors.blue,
-                    child: Icon(Icons.crop),
+                    color: Colors.orange,
+                    child: Icon(
+                      Icons.crop,
+                      color: Colors.white,
+                    ),
                     onPressed: _cropImage,
                   ),
                   FlatButton(
-                    color: Colors.blue,
-                    child: Icon(Icons.refresh),
+                    color: Colors.orange,
+                    child: Icon(
+                      Icons.refresh,
+                      color: Colors.white,
+                    ),
                     onPressed: _clear,
                   ),
                 ],
@@ -172,7 +178,8 @@ class _UploaderState extends State<Uploader> {
 
   void createPost(FirebaseUser userData, String caption) async {
     final StorageTaskSnapshot downloadUrl = (await _uploadTask.onComplete);
-    final String url = (await downloadUrl.ref.getDownloadURL());
+    final String url = await downloadUrl.ref.getDownloadURL() as String;
+
     print('URL Is $url');
 
     DocumentReference ref = await Firestore.instance.collection("posts").add({
@@ -199,7 +206,6 @@ class _UploaderState extends State<Uploader> {
                 : 0;
             if (_uploadTask.isComplete) {
               createPost(widget.user, widget.caption);
-              // Navigator.of(context).pop();
             }
             return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -216,16 +222,24 @@ class _UploaderState extends State<Uploader> {
                     ),
                   LinearProgressIndicator(value: progressPercent),
                   Text(
-                    '${(progressPercent * 100).toStringAsFixed(2)} % ',
+                    '${(progressPercent * 100).toStringAsFixed(0)} % ',
                     style: TextStyle(fontSize: 50),
                   ),
                 ]);
           });
     } else {
       return FlatButton.icon(
-          color: Colors.blue,
-          label: Text('Upload'),
-          icon: Icon(Icons.cloud_upload),
+          color: Colors.orange,
+          label: Text(
+            'Upload',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          icon: Icon(
+            Icons.cloud_upload,
+            color: Colors.white,
+          ),
           onPressed: _startUpload);
     }
   }

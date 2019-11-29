@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
+        foregroundColor: Colors.white,
         onPressed: () {
           Navigator.of(context).pushNamed(
             '/upload_selfie',
@@ -76,12 +77,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.dashboard,
-                          color: currentTab == 0 ? Colors.blue : Colors.grey,
+                          color: currentTab == 0 ? Colors.orange : Colors.grey,
                         ),
                         Text(
                           'Home',
                           style: TextStyle(
-                            color: currentTab == 0 ? Colors.blue : Colors.grey,
+                            color:
+                                currentTab == 0 ? Colors.orange : Colors.grey,
                           ),
                         ),
                       ],
@@ -100,12 +102,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.person,
-                          color: currentTab == 1 ? Colors.blue : Colors.grey,
+                          color: currentTab == 1 ? Colors.orange : Colors.grey,
                         ),
                         Text(
                           'Profile',
                           style: TextStyle(
-                            color: currentTab == 1 ? Colors.blue : Colors.grey,
+                            color:
+                                currentTab == 1 ? Colors.orange : Colors.grey,
                           ),
                         ),
                       ],
@@ -132,12 +135,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.stars,
-                          color: currentTab == 2 ? Colors.blue : Colors.grey,
+                          color: currentTab == 2 ? Colors.orange : Colors.grey,
                         ),
                         Text(
                           'Prizes',
                           style: TextStyle(
-                            color: currentTab == 2 ? Colors.blue : Colors.grey,
+                            color:
+                                currentTab == 2 ? Colors.orange : Colors.grey,
                           ),
                         ),
                       ],
@@ -156,12 +160,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: <Widget>[
                         Icon(
                           Icons.settings,
-                          color: currentTab == 3 ? Colors.blue : Colors.grey,
+                          color: currentTab == 3 ? Colors.orange : Colors.grey,
                         ),
                         Text(
                           'Settings',
                           style: TextStyle(
-                            color: currentTab == 3 ? Colors.blue : Colors.grey,
+                            color:
+                                currentTab == 3 ? Colors.orange : Colors.grey,
                           ),
                         ),
                       ],

@@ -16,10 +16,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
       heightFactor: size.height * .0020,
       child: Container(
         width: size.width * .90,
+        height: size.height * .050,
         child: RaisedButton(
           color: Colors.red,
           textColor: Colors.white,
-          child: Text('logout'),
+          child: Text(
+            'logout',
+            style: TextStyle(
+              fontSize: size.width * .050,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
           onPressed: () {
             Provider.of<User>(context).signOut().whenComplete(() {
               Navigator.pushReplacementNamed(context, '/login');
